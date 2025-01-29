@@ -1,23 +1,21 @@
 package service.DaoMongoDb.Producto;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import dao.ProductoDao;
-import model.ClienteBean.ClienteBean;
 import model.ProductoBean.ProductoBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import service.DaoMongoDb.DaoMongoDB;
 
 import java.util.List;
 
 public class ProductoServices implements ProductoDao {
-    DaoMongoDB daoMongoDB;
 
+    MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
 
+    MongoDatabase db = mongoClient.getDatabase("EasyManage");
     @Override
     public void insert(ProductoBean producto) throws Exception {
 
@@ -28,13 +26,13 @@ public class ProductoServices implements ProductoDao {
                 .append("cantidad", producto.getCantidad())
                 .append("Fecha:",producto.getFechaRegistro());
 
-        daoMongoDB.getDatabase().getCollection("productos").insertOne(document);
+        db.getCollection("productos").insertOne(document);
     }
 
     @Override
     public void delete(int id) throws Exception {
         Bson filter = Filters.eq("id", id);
-        daoMongoDB.getDatabase().getCollection("productos").deleteOne(filter);
+        db.getCollection("productos").deleteOne(filter);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class ProductoServices implements ProductoDao {
                 Updates.set("Fecha:",producto.getFechaRegistro())
         );
 
-        var collection =  daoMongoDB.getDatabase().getCollection("productos");
+        var collection =  db.getCollection("productos");
 
         UpdateResult result = collection.updateOne(filter, update);
 
@@ -60,7 +58,7 @@ public class ProductoServices implements ProductoDao {
 
     @Override
     public ProductoBean findById(int id) throws Exception {
-        MongoCollection<Document> collection = daoMongoDB.getDatabase().getCollection("productos");
+        MongoCollection<Document> collection = db.getCollection("productos");
 
         Bson filter = Filters.eq("dni", id);
         FindIterable<Document> result = collection.find(filter);

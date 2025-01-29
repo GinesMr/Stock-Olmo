@@ -1,8 +1,6 @@
 package service.DaoMongoDb.Cliente;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
@@ -10,13 +8,16 @@ import dao.ClienteDao;
 import model.ClienteBean.ClienteBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import service.DaoMongoDb.DaoMongoDB;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteServices implements ClienteDao {
 
-        DaoMongoDB daoMongoDB;
+    MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+    MongoDatabase db = mongoClient.getDatabase("EasyManage");
 
     @Override
     public void insert(ClienteBean cliente) throws Exception {
@@ -26,13 +27,13 @@ public class ClienteServices implements ClienteDao {
                 .append("email", cliente.getEmail())
                 .append("fecha",cliente.getFechaRegistro());
 
-        daoMongoDB.getDatabase().getCollection("clientes").insertOne(document);
+        db.getCollection("clientes").insertOne(document);
     }
 
     @Override
     public void delete(int dni) throws Exception {
         Bson filter = Filters.eq("dni", dni);
-        daoMongoDB.getDatabase().getCollection("clientes").deleteOne(filter);
+        db.getCollection("clientes").deleteOne(filter);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ClienteServices implements ClienteDao {
                 Updates.set("fecha",cliente.getFechaRegistro())
         );
 
-        var collection =  daoMongoDB.getDatabase().getCollection("clientes");
+        var collection =  db.getCollection("clientes");
 
         UpdateResult result = collection.updateOne(filter, update);
 
@@ -59,7 +60,7 @@ public class ClienteServices implements ClienteDao {
 
     @Override
     public ClienteBean findById(int dni) throws Exception {
-        MongoCollection<Document> collection = daoMongoDB.getDatabase().getCollection("clientes");
+        MongoCollection<Document> collection = db.getCollection("clientes");
 
         Bson filter = Filters.eq("dni", dni);
         FindIterable<Document> result = collection.find(filter);
@@ -78,9 +79,24 @@ public class ClienteServices implements ClienteDao {
             return null;
         }
     }
-
     @Override
     public List<ClienteBean> findAll() throws Exception {
-        return List.of();
+        MongoCollection<Document> collection = db.getCollection("clientes");
+        FindIterable<Document> documents = collection.find();
+        List<ClienteBean> clientes = new ArrayList<>();
+
+        for (Document doc : documents) {
+            ClienteBean cliente = new ClienteBean();
+            cliente.setDni(doc.getInteger("dni"));
+            cliente.setNombre(doc.getString("nombre"));
+            cliente.setDireccion(doc.getString("direccion"));
+            cliente.setTelefono(doc.getString("telefono"));
+            cliente.setEmail(doc.getString("email"));
+            cliente.setFechaRegistro(doc.getDate("fecha"));
+            clientes.add(cliente);
+        }
+
+        return clientes;
     }
+
 }

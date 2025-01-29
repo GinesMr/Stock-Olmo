@@ -21,6 +21,8 @@
                      <TextField fx:id="clienteTelefonoField" promptText="Teléfono" />
                      <TextField fx:id="clienteEmailField" promptText="Email" />
                      <Button fx:id="agregarClienteButton" text="Agregar Cliente" />
+                     <Button fx:id="actualizarClienteButton" text="Actualizar Cliente" />
+                     <Button fx:id="eliminarClienteButton" text="Eliminar Cliente" />
                   </HBox>
                   <TableView fx:id="clientesTable">
                      <columns>
@@ -43,6 +45,9 @@
                      <TextField fx:id="productoPrecioField" promptText="Precio" />
                      <TextField fx:id="productoStockField" promptText="Stock" />
                      <Button fx:id="agregarProductoButton" text="Agregar Producto" />
+                     <Button fx:id="actualizarProductoButton" text="Actualizar Producto" />
+                     <Button fx:id="eliminarProductoButton" text="Eliminar Producto" />
+
                   </HBox>
                   <TableView fx:id="productosTable">
                      <columns>

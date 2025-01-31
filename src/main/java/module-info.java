@@ -1,6 +1,6 @@
 module org.example.ejer1 {
     requires javafx.controls;
-    requires javafx.fxml;
+    requires org.kordamp.ikonli.javafx;
     requires javafx.web;
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.bson;

@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController.EasyManageController">
    <center>
       <TabPane>
@@ -23,6 +24,18 @@
                      <Button fx:id="agregarClienteButton" text="Agregar Cliente" />
                      <Button fx:id="actualizarClienteButton" text="Actualizar Cliente" />
                      <Button fx:id="eliminarClienteButton" text="Eliminar Cliente" />
+                     <HBox spacing="10">
+                        <!-- Aplicar margen izquierdo al TextField -->
+                        <TextField fx:id="buscarCliente" promptText="Atributo de Cliente">
+                           <HBox.margin>
+                              <Insets left="50" />
+                           </HBox.margin>
+                        </TextField>
+
+                        <!-- Button -->
+                        <Button fx:id="ActualizarClienteButton" text="Actualizar Cliente" />
+                     </HBox>
+
                   </HBox>
                   <TableView fx:id="clientesTable">
                      <columns>
@@ -47,7 +60,7 @@
                      <Button fx:id="agregarProductoButton" text="Agregar Producto" />
                      <Button fx:id="actualizarProductoButton" text="Actualizar Producto" />
                      <Button fx:id="eliminarProductoButton" text="Eliminar Producto" />
-
+                     <Button fx:id="ActualizarProdcutoButton" text="Actualizar Producto" />
                   </HBox>
                   <TableView fx:id="productosTable">
                      <columns>

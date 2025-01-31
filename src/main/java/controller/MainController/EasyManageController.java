@@ -27,6 +27,9 @@ public class EasyManageController extends Thread{
     private Button eliminarClienteButton;
     @FXML
     private Button agregarClienteButton;
+    @FXML
+    private Button ActualizarClienteButton;
+
 
     @FXML
     private Button actualizarProductoButton;
@@ -34,6 +37,9 @@ public class EasyManageController extends Thread{
     private Button eliminarProductoButton;
     @FXML
     private Button agregarProductoButton;
+    @FXML
+    private Button ActualizarProdcutoButton;
+
 
     @FXML
     private TextField clienteDniField;
@@ -170,8 +176,21 @@ public class EasyManageController extends Thread{
 
     }
 
-    private void updateClienete(){
-//Terminar este metodo despues de cenar
+    private void updateCliente() throws Exception {
+
+        ClienteBean clienteSeleccionado = clientesTable.getSelectionModel().getSelectedItem();
+
+        if (clienteSeleccionado==null){
+            mostrarAlerta("Informacion","Sin seleccion","El cliente no ha sido seleccionado para ser actualizado.",Alert.AlertType.INFORMATION);
+            System.out.println("No hay cliente seleccionado.");
+        }else{
+            Alert e= mostrarAlerta("Confirmacion","Esta seguro que desea actualizar este cliente","El cliente sera actualizado permanentamente.",Alert.AlertType.CONFIRMATION);
+            if(e.getResult() == ButtonType.OK) {
+                clientesList.remove(clienteSeleccionado);
+                clienteServices.update(clienteSeleccionado);
+                mostrarAlerta("Exito","Cliente ha sido actualizado con exito","El cliente fue actualizado permanentamente.",Alert.AlertType.INFORMATION);
+
+            }}
 
     }
     private void cagarTablaCliente() throws Exception {

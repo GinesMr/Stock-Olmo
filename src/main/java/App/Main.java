@@ -10,6 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         // Cargar el archivo FXML desde la ruta especificada
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView/MainView.fxml"));
         Parent root = loader.load();

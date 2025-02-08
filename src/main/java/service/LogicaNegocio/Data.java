@@ -1,27 +1,56 @@
 package service.LogicaNegocio;
+
 import dao.Cliente.ClienteServices;
-import dao.Producto.ProductoServices;
 import model.ClienteBean.ClienteBean;
 
 import java.util.List;
 
 public class Data {
-    ClienteServices clienteServices;
+    private ClienteServices clienteServices;
 
-    public void Insertar(ClienteBean cli) throws Exception {
-        clienteServices.insert(cli);
+    public Data() {
+        this.clienteServices = new ClienteServices(); // Asegúrate de que ClienteServices tenga un constructor sin argumentos
     }
-    public void Actualizar(ClienteBean cli) throws Exception {
-        //clienteServices.update(cli);
-    }
-    public void Eliminar(ClienteBean cli) throws Exception {
-        clienteServices.delete(cli.getDni());
-    }
-    public ClienteBean BuscarCliente(String dni) throws Exception {
-        return clienteServices.findById(Integer.parseInt(dni));
-    }
-    public List<ClienteBean> ListaClientes() throws Exception {
-       return clienteServices.findAll();
 
+    public void Insertar(ClienteBean cli) {
+        try {
+            clienteServices.insert(cli);
+        } catch (Exception e) {
+            System.err.println("Error al insertar cliente: " + e.getMessage());
+        }
+    }
+
+    public void Actualizar(ClienteBean cli) {
+        try {
+            clienteServices.update(cli);
+        } catch (Exception e) {
+            System.err.println("Error al actualizar cliente: " + e.getMessage());
+        }
+    }
+
+    public void Eliminar(int dni) {
+        try {
+            clienteServices.delete(dni);
+        } catch (Exception e) {
+            System.err.println("Error al eliminar cliente: " + e.getMessage());
+        }
+    }
+
+    public ClienteBean BuscarCliente(int dni) {
+        try {
+            return clienteServices.findById(dni);
+        } catch (Exception e) {
+            System.err.println("Error al buscar cliente: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<ClienteBean> ListaClientes() {
+        try {
+            return clienteServices.findAll();
+        } catch (Exception e) {
+            System.err.println("Error al listar clientes: " + e.getMessage());
+            return null;
+        }
     }
 }

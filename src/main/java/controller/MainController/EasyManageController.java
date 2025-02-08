@@ -14,6 +14,7 @@ import model.ProductoBean.ProductoBean;
 import dao.Cliente.ClienteServices;
 import dao.Producto.ProductoServices;
 import org.w3c.dom.Text;
+import service.LogicaNegocio.Data;
 
 import java.net.URL;
 import java.util.Date;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 public class EasyManageController extends Thread{
     // Initialize services
-    private ClienteServices clienteServices = new ClienteServices();
+    private Data x = new Data();
     private ProductoServices productoServices = new ProductoServices();
 
 
@@ -142,37 +143,66 @@ public class EasyManageController extends Thread{
     }
 
 
-
     private void agregarCliente() {
         try {
-            int dni = Integer.parseInt(clienteDniField.getText());
-            String nombre = clienteNombreField.getText();
-            String direccion = clienteDireccionField.getText();
-            String telefono = clienteTelefonoField.getText();
-            String email = clienteEmailField.getText();
-            ClienteBean cli= clienteServices.findById(dni);
+            int dni = Integer.parseInt(clienteDniField.getText().trim());
+            String nombre = clienteNombreField.getText().trim();
+            String direccion = clienteDireccionField.getText().trim();
+            String telefono = clienteTelefonoField.getText().trim();
+            String email = clienteEmailField.getText().trim();
 
-            if (!nombre.isEmpty() && !telefono.isEmpty() && !email.isEmpty()&& !direccion.isEmpty()) {
-                    if(email.matches("^[A-Za-z0-9+_.-]+@(.+)$")==false){
-                        mostrarAlerta("Error","El email introducido es invalido","El cliente no ha sido agregado",Alert.AlertType.ERROR);
-                        return;
-                    }
-                ClienteBean cliente = new ClienteBean(dni, nombre, direccion, telefono, email, null);
-                clientesList.add(cliente);
-                clienteServices.insert(cliente);
-                limpiarCamposCliente();
-                mostrarAlerta("Exito","Cliente agregado con exito ","El cliente fue agregado .",Alert.AlertType.INFORMATION);
-
-            } else {
-                mostrarAlerta("Campos Invalidos","Rellene todos los campos de manera correcta ","Tenga en cuenta el formato del Dni y Email.",Alert.AlertType.INFORMATION);
+            String error = validarCliente(dni, nombre, telefono, email, direccion);
+            if (!error.isEmpty()) {
+                mostrarAlerta("Error", error, "El cliente no ha sido agregado", Alert.AlertType.ERROR);
+                return;
             }
-        } catch (IllegalArgumentException e) {
-            mostrarAlerta("Campos Invalidos","Rellene todos los campos de manera correcta ","Tenga en cuenta el formato del Dni y Email.",Alert.AlertType.INFORMATION);
 
+            ClienteBean cli = x.BuscarCliente(dni);
+            if (cli != null) {
+                mostrarAlerta("Error", "El cliente con DNI " + dni + " ya existe.", "No se puede agregar un cliente duplicado.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            ClienteBean cliente = new ClienteBean(dni, nombre, direccion, telefono, email, null);
+            clientesList.add(cliente);
+            x.Insertar(cliente);
+
+            limpiarCamposCliente();
+            mostrarAlerta("Éxito", "Cliente agregado con éxito", "El cliente fue agregado correctamente.", Alert.AlertType.INFORMATION);
+
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Campos Inválidos", "El DNI debe ser un número válido.", "Tenga en cuenta el formato del DNI.", Alert.AlertType.ERROR);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            mostrarAlerta("Error inesperado", "Ha ocurrido un error al agregar el cliente.", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
+    private String validarCliente(int dni, String nombre, String telefono, String email, String direccion) {
+        StringBuilder error = new StringBuilder();
+
+        if (String.valueOf(dni).length() != 8) {
+            error.append("El DNI debe contener exactamente 8 dígitos numéricos.\n");
+        }
+
+        if (nombre.isEmpty() || !nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$")) {
+            error.append("El nombre solo debe contener letras y no puede estar vacío.\n");
+        }
+
+        if (!telefono.matches("\\d{9}")) {
+            error.append("El teléfono debe contener exactamente 9 dígitos numéricos.\n");
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            error.append("El email introducido no es válido.\n");
+        }
+
+        if (direccion.isEmpty()) {
+            error.append("La dirección no puede estar vacía.\n");
+        }
+
+        return error.toString();
+    }
+
 
     private void eliminarCliente() throws Exception {
 
@@ -186,97 +216,101 @@ public class EasyManageController extends Thread{
             if(e.getResult() == ButtonType.OK) {
                 System.out.println("Cliente seleccionado: " + clienteSeleccionado.getNombre());
                 clientesList.remove(clienteSeleccionado);
-                clienteServices.delete(clienteSeleccionado.getDni());
+                int dni = clienteSeleccionado.getDni();
+                x.Eliminar(dni);
                 mostrarAlerta("Exito","Cliente eliminado con exito","El cliente fue eliminado permanentamente.",Alert.AlertType.INFORMATION);
 
             }}
 
 
     }
-
     private void updateCliente() throws Exception {
         ClienteBean clienteSeleccionado = clientesTable.getSelectionModel().getSelectedItem();
 
         if (clienteSeleccionado == null) {
-            mostrarAlerta("Informacion", "Sin seleccion", "El cliente no ha sido seleccionado para ser actualizado.", Alert.AlertType.INFORMATION);
-            System.out.println("No hay cliente seleccionado.");
+            mostrarAlerta("Información", "Sin selección", "Debe seleccionar un cliente para actualizar.", Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        Alert confirmAlert = mostrarAlerta("Confirmación", "¿Está seguro que desea actualizar este cliente?", "El cliente será actualizado permanentemente.", Alert.AlertType.CONFIRMATION);
+        if (confirmAlert.getResult() != ButtonType.OK) {
+            return;
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Actualizar Cliente");
+        dialog.setHeaderText("Ingrese los nuevos datos del cliente");
+        String cssPath = "/MainView/updateCss.css";
+        URL cssResource = getClass().getResource(cssPath);
+
+        if (cssResource != null) {
+            dialog.getDialogPane().getStylesheets().add(cssResource.toExternalForm());
         } else {
-            Alert confirmAlert = mostrarAlerta("Confirmacion", "¿Está seguro que desea actualizar este cliente?", "El cliente será actualizado permanentemente.", Alert.AlertType.CONFIRMATION);
-            if (confirmAlert.getResult() == ButtonType.OK) {
-                // Crear un diálogo para que el usuario ingrese los nuevos datos
-                Dialog<ButtonType> dialog = new Dialog<>();
-                dialog.setTitle("Actualizar Cliente");
-                dialog.setHeaderText("Ingrese los nuevos datos del cliente");
-                String cssPath = "/MainView/custom-alert.css";
-                URL cssResource = getClass().getResource(cssPath);
+            System.err.println("No se pudo cargar el archivo CSS: " + cssPath);
+        }
 
-                if (cssResource != null) {
-                    dialog.getDialogPane().getStylesheets().add(cssResource.toExternalForm());
-                } else {
-                    System.err.println("No se pudo cargar el archivo CSS: " + cssPath);
-                }
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
 
-                // Crear el GridPane y los campos de texto
-                GridPane grid = new GridPane();
-                grid.setHgap(10);
-                grid.setVgap(10);
-                grid.setPadding(new Insets(20, 150, 10, 10));
+        TextField nombreTextField = new TextField(clienteSeleccionado.getNombre());
+        nombreTextField.setPromptText("Nombre");
 
-                TextField nombreTextField = new TextField(clienteSeleccionado.getNombre()); // Prellenar con el valor actual
-                nombreTextField.setPromptText("Nombre");
+        TextField direccionTextField = new TextField(clienteSeleccionado.getDireccion());
+        direccionTextField.setPromptText("Dirección");
 
-                TextField directionTextField = new TextField(clienteSeleccionado.getDireccion()); // Prellenar con el valor actual
-                directionTextField.setPromptText("Direccion");
+        TextField telefonoTextField = new TextField(clienteSeleccionado.getTelefono());
+        telefonoTextField.setPromptText("Teléfono");
 
-                TextField phoneTextField = new TextField(clienteSeleccionado.getTelefono()); // Prellenar con el valor actual
-                phoneTextField.setPromptText("Telefono");
+        TextField emailTextField = new TextField(clienteSeleccionado.getEmail());
+        emailTextField.setPromptText("Email");
 
-                TextField emailTextField = new TextField(clienteSeleccionado.getEmail()); // Prellenar con el valor actual
-                emailTextField.setPromptText("Email");
+        grid.add(new Label("Nombre:"), 0, 0);
+        grid.add(nombreTextField, 1, 0);
+        grid.add(new Label("Dirección:"), 0, 1);
+        grid.add(direccionTextField, 1, 1);
+        grid.add(new Label("Teléfono:"), 0, 2);
+        grid.add(telefonoTextField, 1, 2);
+        grid.add(new Label("Email:"), 0, 3);
+        grid.add(emailTextField, 1, 3);
 
-                grid.add(new Label("Nombre:"), 0, 0);
-                grid.add(nombreTextField, 1, 0);
-                grid.add(new Label("Direccion:"), 0, 1);
-                grid.add(directionTextField, 1, 1);
-                grid.add(new Label("Telefono:"), 0, 2);
-                grid.add(phoneTextField, 1, 2);
-                grid.add(new Label("Email:"), 0, 3);
-                grid.add(emailTextField, 1, 3);
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-                dialog.getDialogPane().setContent(grid);
+        Optional<ButtonType> result = dialog.showAndWait();
 
-                // Agregar botones de OK y Cancelar
-                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String nombre = nombreTextField.getText().trim();
+            String direccion = direccionTextField.getText().trim();
+            String telefono = telefonoTextField.getText().trim();
+            String email = emailTextField.getText().trim();
 
-                // Mostrar el diálogo y esperar la respuesta del usuario
-                Optional<ButtonType> result = dialog.showAndWait();
-
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // Obtener los valores ingresados por el usuario
-                    String nombreResult = nombreTextField.getText();
-                    String directionResult = directionTextField.getText();
-                    String phoneResult = phoneTextField.getText();
-                    String emailResult = emailTextField.getText();
-
-                    // Actualizar el cliente con los nuevos valores
-                    clienteSeleccionado.setNombre(nombreResult);
-                    clienteSeleccionado.setDireccion(directionResult);
-                    clienteSeleccionado.setTelefono(phoneResult);
-                    clienteSeleccionado.setEmail(emailResult);
-
-                    clienteServices.update(clienteSeleccionado);
-
-                    // Refrescar la tabla para mostrar los cambios
-
-                    // Mostrar mensaje de éxito
-                    mostrarAlerta("Exito", "Cliente actualizado", "El cliente fue actualizado permanentemente.", Alert.AlertType.INFORMATION);
-                }
+            // Validar los datos ingresados
+            String error = validarCliente(clienteSeleccionado.getDni(), nombre, telefono, email, direccion);
+            if (!error.isEmpty()) {
+                mostrarAlerta("Error", "Datos inválidos", error, Alert.AlertType.ERROR);
+                return;
             }
+
+            // Actualizar el cliente con los nuevos valores
+            clienteSeleccionado.setNombre(nombre);
+            clienteSeleccionado.setDireccion(direccion);
+            clienteSeleccionado.setTelefono(telefono);
+            clienteSeleccionado.setEmail(email);
+
+            x.Actualizar(clienteSeleccionado);
+
+            // Refrescar la tabla para mostrar los cambios
+            clientesTable.refresh();
+
+            mostrarAlerta("Éxito", "Cliente actualizado", "El cliente fue actualizado correctamente.", Alert.AlertType.INFORMATION);
         }
     }
+
     private void cagarTablaCliente() throws Exception {
         try {
-            List<ClienteBean> clientesBean = clienteServices.findAll();
+            List<ClienteBean> clientesBean = x.ListaClientes();
 
             for (ClienteBean clienteBean : clientesBean) {
                 ClienteBean cliente = new ClienteBean(

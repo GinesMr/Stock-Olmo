@@ -26,7 +26,7 @@
                      <Button fx:id="eliminarClienteButton" text="Eliminar Cliente" />
                      <HBox spacing="10">
                         <!-- Aplicar margen izquierdo al TextField -->
-                        <TextField fx:id="buscarCliente" promptText="Atributo de Cliente">
+                        <TextField fx:id="buscarCliente" promptText="Buscar Cliente">
                            <HBox.margin>
                               <Insets left="120" />
                            </HBox.margin>

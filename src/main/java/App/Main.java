@@ -18,6 +18,10 @@ public class Main extends Application {
         // Configurar la escena
         Scene scene = new Scene(root);
 
+        // Cargar y aplicar el archivo CSS
+        String css = getClass().getResource("/MainView/si.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
         // Configurar la ventana principal
         primaryStage.setTitle("Easy Manage - Gestión de Clientes y Productos");
         primaryStage.setScene(scene);

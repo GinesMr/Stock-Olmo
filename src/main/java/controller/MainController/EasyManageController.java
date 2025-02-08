@@ -1,17 +1,24 @@
 package controller.MainController;
 
+
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 import model.ClienteBean.ClienteBean;
 import model.ProductoBean.ProductoBean;
-import service.DaoMongoDb.Cliente.ClienteServices;
-import service.DaoMongoDb.Producto.ProductoServices;
+import dao.Cliente.ClienteServices;
+import dao.Producto.ProductoServices;
+import org.w3c.dom.Text;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class EasyManageController extends Thread{
     // Initialize services
@@ -118,7 +125,13 @@ public class EasyManageController extends Thread{
                 throw new RuntimeException(e);
             }
         });
-
+        actualizarClienteButton.setOnAction(event -> {
+            try {
+                updateCliente();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         agregarProductoButton.setOnAction(event -> agregarProducto());
         agregarProductoButton.setOnAction(event -> agregarProducto());
 
@@ -137,8 +150,13 @@ public class EasyManageController extends Thread{
             String direccion = clienteDireccionField.getText();
             String telefono = clienteTelefonoField.getText();
             String email = clienteEmailField.getText();
+            ClienteBean cli= clienteServices.findById(dni);
 
             if (!nombre.isEmpty() && !telefono.isEmpty() && !email.isEmpty()&& !direccion.isEmpty()) {
+                    if(email.matches("^[A-Za-z0-9+_.-]+@(.+)$")==false){
+                        mostrarAlerta("Error","El email introducido es invalido","El cliente no ha sido agregado",Alert.AlertType.ERROR);
+                        return;
+                    }
                 ClienteBean cliente = new ClienteBean(dni, nombre, direccion, telefono, email, null);
                 clientesList.add(cliente);
                 clienteServices.insert(cliente);
@@ -177,21 +195,84 @@ public class EasyManageController extends Thread{
     }
 
     private void updateCliente() throws Exception {
-
         ClienteBean clienteSeleccionado = clientesTable.getSelectionModel().getSelectedItem();
 
-        if (clienteSeleccionado==null){
-            mostrarAlerta("Informacion","Sin seleccion","El cliente no ha sido seleccionado para ser actualizado.",Alert.AlertType.INFORMATION);
+        if (clienteSeleccionado == null) {
+            mostrarAlerta("Informacion", "Sin seleccion", "El cliente no ha sido seleccionado para ser actualizado.", Alert.AlertType.INFORMATION);
             System.out.println("No hay cliente seleccionado.");
-        }else{
-            Alert e= mostrarAlerta("Confirmacion","Esta seguro que desea actualizar este cliente","El cliente sera actualizado permanentamente.",Alert.AlertType.CONFIRMATION);
-            if(e.getResult() == ButtonType.OK) {
-                clientesList.remove(clienteSeleccionado);
-                clienteServices.update(clienteSeleccionado);
-                mostrarAlerta("Exito","Cliente ha sido actualizado con exito","El cliente fue actualizado permanentamente.",Alert.AlertType.INFORMATION);
+        } else {
+            Alert confirmAlert = mostrarAlerta("Confirmacion", "¿Está seguro que desea actualizar este cliente?", "El cliente será actualizado permanentemente.", Alert.AlertType.CONFIRMATION);
+            if (confirmAlert.getResult() == ButtonType.OK) {
+                // Crear un diálogo para que el usuario ingrese los nuevos datos
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Actualizar Cliente");
+                dialog.setHeaderText("Ingrese los nuevos datos del cliente");
+                String cssPath = "/MainView/custom-alert.css";
+                URL cssResource = getClass().getResource(cssPath);
 
-            }}
+                if (cssResource != null) {
+                    dialog.getDialogPane().getStylesheets().add(cssResource.toExternalForm());
+                } else {
+                    System.err.println("No se pudo cargar el archivo CSS: " + cssPath);
+                }
 
+                // Crear el GridPane y los campos de texto
+                GridPane grid = new GridPane();
+                grid.setHgap(10);
+                grid.setVgap(10);
+                grid.setPadding(new Insets(20, 150, 10, 10));
+
+                TextField nombreTextField = new TextField(clienteSeleccionado.getNombre()); // Prellenar con el valor actual
+                nombreTextField.setPromptText("Nombre");
+
+                TextField directionTextField = new TextField(clienteSeleccionado.getDireccion()); // Prellenar con el valor actual
+                directionTextField.setPromptText("Direccion");
+
+                TextField phoneTextField = new TextField(clienteSeleccionado.getTelefono()); // Prellenar con el valor actual
+                phoneTextField.setPromptText("Telefono");
+
+                TextField emailTextField = new TextField(clienteSeleccionado.getEmail()); // Prellenar con el valor actual
+                emailTextField.setPromptText("Email");
+
+                grid.add(new Label("Nombre:"), 0, 0);
+                grid.add(nombreTextField, 1, 0);
+                grid.add(new Label("Direccion:"), 0, 1);
+                grid.add(directionTextField, 1, 1);
+                grid.add(new Label("Telefono:"), 0, 2);
+                grid.add(phoneTextField, 1, 2);
+                grid.add(new Label("Email:"), 0, 3);
+                grid.add(emailTextField, 1, 3);
+
+                dialog.getDialogPane().setContent(grid);
+
+                // Agregar botones de OK y Cancelar
+                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                // Mostrar el diálogo y esperar la respuesta del usuario
+                Optional<ButtonType> result = dialog.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // Obtener los valores ingresados por el usuario
+                    String nombreResult = nombreTextField.getText();
+                    String directionResult = directionTextField.getText();
+                    String phoneResult = phoneTextField.getText();
+                    String emailResult = emailTextField.getText();
+
+                    // Actualizar el cliente con los nuevos valores
+                    clienteSeleccionado.setNombre(nombreResult);
+                    clienteSeleccionado.setDireccion(directionResult);
+                    clienteSeleccionado.setTelefono(phoneResult);
+                    clienteSeleccionado.setEmail(emailResult);
+
+                    clienteServices.update(clienteSeleccionado);
+
+                    // Refrescar la tabla para mostrar los cambios
+
+                    // Mostrar mensaje de éxito
+                    mostrarAlerta("Exito", "Cliente actualizado", "El cliente fue actualizado permanentemente.", Alert.AlertType.INFORMATION);
+                }
+            }
+        }
     }
     private void cagarTablaCliente() throws Exception {
         try {
@@ -268,11 +349,36 @@ public class EasyManageController extends Thread{
         alert.setTitle(titulo);
         alert.setHeaderText(encabezado);
         alert.setContentText(mensaje);
+
+        DialogPane dialogPane = alert.getDialogPane();
+
+        String cssPath = "/MainView/custom-alert.css";
+        dialogPane.getStylesheets().add(
+                getClass().getResource(cssPath).toExternalForm()
+        );
+
+        dialogPane.getStyleClass().add("custom-alert");
+
+        switch (tipo) {
+            case CONFIRMATION:
+                dialogPane.getStyleClass().add("confirmation");
+                break;
+            case INFORMATION:
+                dialogPane.getStyleClass().add("information");
+                break;
+            case ERROR:
+                dialogPane.getStyleClass().add("error");
+                break;
+            case WARNING:
+                dialogPane.getStyleClass().add("warning");
+                break;
+        }
+
         alert.showAndWait();
         return alert;
     }
 
-    // Método para limpiar los campos de cliente
+
     private void limpiarCamposCliente() {
         clienteDniField.clear();
         clienteNombreField.clear();
@@ -281,7 +387,6 @@ public class EasyManageController extends Thread{
         clienteEmailField.clear();
     }
 
-    // Método para limpiar los campos de producto
     private void limpiarCamposProducto() {
         productoNombreField.clear();
         productoDescripcionField.clear();

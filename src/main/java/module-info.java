@@ -5,6 +5,7 @@ module org.example.ejer1 {
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.bson;
     requires org.mongodb.driver.core;
+    requires javafx.fxml;
 
     opens model.ClienteBean to javafx.base;
     // Grant reflective access to the controller.MainController package for javafx.fxml

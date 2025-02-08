@@ -1,10 +1,10 @@
-package service.DaoMongoDb.Cliente;
+package dao.Cliente;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
-import dao.ClienteDao;
+import dao.Dao.Cliente.ClienteDao;
 import model.ClienteBean.ClienteBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -23,6 +23,7 @@ public class ClienteServices implements ClienteDao {
     public void insert(ClienteBean cliente) throws Exception {
         Document document = new Document("dni", cliente.getDni())
                 .append("nombre", cliente.getNombre())
+                .append("direccion", cliente.getDireccion())
                 .append("telefono", cliente.getTelefono())
                 .append("email", cliente.getEmail())
                 .append("fecha",cliente.getFechaRegistro());

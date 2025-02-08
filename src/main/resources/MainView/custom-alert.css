@@ -1,0 +1,83 @@
+.custom-alert {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #E0E0E0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 3);
+}
+
+.custom-alert > *.header-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 5px 5px 0 0;
+}
+
+.custom-alert > *.header-panel > *.label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.custom-alert > *.content.label {
+    -fx-font-size: 14px;
+    -fx-padding: 16px;
+    -fx-text-fill: #34495E;
+}
+
+.custom-alert .button-bar .button {
+    -fx-background-color: #007BFF;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.custom-alert .button-bar .button:hover {
+    -fx-background-color: #6200EEFF;
+}
+
+.custom-alert .button-bar .button:pressed {
+    -fx-background-color: #004085;
+}
+
+/* Estilos específicos por tipo de alerta */
+.custom-alert.information .button-bar .button {
+    -fx-background-color: #007BFF;
+}
+
+.custom-alert.information .button-bar .button:hover {
+    -fx-background-color: #0056b3;
+}
+
+.custom-alert.error .button-bar .button {
+    -fx-background-color: #dc3545;
+}
+
+.custom-alert.error .button-bar .button:hover {
+    -fx-background-color: #c82333;
+}
+
+.custom-alert.warning .button-bar .button {
+    -fx-background-color: #ffc107;
+}
+
+.custom-alert.warning .button-bar .button:hover {
+    -fx-background-color: #e0a800;
+}
+
+.custom-alert.confirmation .button-bar .button {
+    -fx-background-color: #007BFFFF;
+}
+
+.custom-alert.confirmation .button-bar .button:hover {
+    -fx-background-color: #007BFFFF;
+}
+
+/* Estilo para botones de cancelar */
+.custom-alert .button-bar .button.cancel-button {
+    -fx-background-color: #6c757d;
+}
+
+.custom-alert .button-bar .button.cancel-button:hover {
+    -fx-background-color: #5a6268;
+}

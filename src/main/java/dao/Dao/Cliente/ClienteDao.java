@@ -1,4 +1,4 @@
-package dao;
+package dao.Dao.Cliente;
 
 import model.ClienteBean.ClienteBean;
 import java.util.List;

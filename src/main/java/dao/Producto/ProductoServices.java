@@ -1,10 +1,10 @@
-package service.DaoMongoDb.Producto;
+package dao.Producto;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
-import dao.ProductoDao;
+import dao.Dao.Producto.ProductoDao;
 import model.ProductoBean.ProductoBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;

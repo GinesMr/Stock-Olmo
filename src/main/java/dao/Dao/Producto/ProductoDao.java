@@ -1,4 +1,4 @@
-package dao;
+package dao.Dao.Producto;
 
 import model.ProductoBean.ProductoBean;
 

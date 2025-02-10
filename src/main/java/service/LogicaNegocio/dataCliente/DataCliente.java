@@ -1,14 +1,14 @@
-package service.LogicaNegocio;
+package service.LogicaNegocio.dataCliente;
 
 import dao.Cliente.ClienteServices;
 import model.ClienteBean.ClienteBean;
 
 import java.util.List;
 
-public class Data {
+public class DataCliente {
     private ClienteServices clienteServices;
 
-    public Data() {
+    public DataCliente() {
         this.clienteServices = new ClienteServices(); // Asegúrate de que ClienteServices tenga un constructor sin argumentos
     }
 

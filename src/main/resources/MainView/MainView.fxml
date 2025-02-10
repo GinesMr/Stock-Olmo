@@ -25,7 +25,6 @@
                      <Button fx:id="actualizarClienteButton" text="Actualizar Cliente" />
                      <Button fx:id="eliminarClienteButton" text="Eliminar Cliente" />
                      <HBox spacing="10">
-                        <!-- Aplicar margen izquierdo al TextField -->
                         <TextField fx:id="buscarCliente" promptText="Buscar Cliente">
                            <HBox.margin>
                               <Insets left="120" />
@@ -76,6 +75,7 @@
             <Tab text="Productos">
                <VBox spacing="10">
                   <HBox spacing="10">
+                     <TextField fx:id="idNombreField" promptText="Id del producto" />
                      <TextField fx:id="productoNombreField" promptText="Nombre del producto" />
                      <TextField fx:id="productoDescripcionField" promptText="Descripción" />
                      <TextField fx:id="productoPrecioField" promptText="Precio" />
@@ -83,9 +83,22 @@
                      <Button fx:id="agregarProductoButton" text="Agregar Producto" />
                      <Button fx:id="actualizarProductoButton" text="Actualizar Producto" />
                      <Button fx:id="eliminarProductoButton" text="Eliminar Producto" />
+                     <HBox spacing="10">
+                        <TextField fx:id="buscarProducto" promptText="Buscar Producto">
+                           <HBox.margin>
+                              <Insets left="120" />
+                           </HBox.margin>
+                        </TextField>
+                     </HBox>
+
                   </HBox>
                   <TableView fx:id="productosTable" VBox.vgrow="ALWAYS">
                      <columns>
+                        <TableColumn fx:id="colProductoId" text="id">
+                           <minWidth>150.0</minWidth>
+                           <prefWidth>200.0</prefWidth>
+                           <maxWidth>Infinity</maxWidth>
+                        </TableColumn>
                         <TableColumn fx:id="colProductoNombre" text="Nombre">
                            <minWidth>150.0</minWidth>
                            <prefWidth>200.0</prefWidth>

@@ -5,10 +5,12 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import dao.Dao.Producto.ProductoDao;
+import model.ClienteBean.ClienteBean;
 import model.ProductoBean.ProductoBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoServices implements ProductoDao {
@@ -30,8 +32,9 @@ public class ProductoServices implements ProductoDao {
     }
 
     @Override
-    public void delete(int id) throws Exception {
-        Bson filter = Filters.eq("id", id);
+    public void delete(String nombre) throws Exception {
+
+        Bson filter = Filters.eq("Nombre", nombre);
         db.getCollection("productos").deleteOne(filter);
     }
 
@@ -60,7 +63,7 @@ public class ProductoServices implements ProductoDao {
     public ProductoBean findById(int id) throws Exception {
         MongoCollection<Document> collection = db.getCollection("productos");
 
-        Bson filter = Filters.eq("dni", id);
+        Bson filter = Filters.eq("id", id);
         FindIterable<Document> result = collection.find(filter);
 
         Document document = result.first();
@@ -80,6 +83,21 @@ public class ProductoServices implements ProductoDao {
 
     @Override
     public List<ProductoBean> findAll() throws Exception {
-        return List.of();
+        MongoCollection<Document> collection = db.getCollection("productos");
+        FindIterable<Document> documents = collection.find();
+        List<ProductoBean> productos = new ArrayList<>();
+
+        for (Document doc : documents) {
+            ProductoBean producto = new ProductoBean();
+            producto.setId(doc.getInteger("id"));
+            producto.setNombre(doc.getString("nombre"));
+            producto.setDescripcion(doc.getString("descripcion"));
+            producto.setPrecio(doc.getDouble("precio"));
+            producto.setCantidad(doc.getInteger("cantidad"));
+            producto.setFechaRegistro(doc.getDate("fechaRegistro"));
+            productos.add(producto);
+        }
+
+        return productos;
     }
 }

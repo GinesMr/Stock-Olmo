@@ -9,7 +9,7 @@ public interface ProductoDao {
     void insert(ProductoBean producto) throws Exception;
 
 
-    void delete(int dni) throws Exception;
+    void delete(String nombre) throws Exception;
 
 
     void update(ProductoBean producto) throws Exception;

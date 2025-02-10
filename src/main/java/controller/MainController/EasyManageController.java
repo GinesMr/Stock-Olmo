@@ -1,6 +1,5 @@
 package controller.MainController;
 
-
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -68,6 +67,8 @@ public class EasyManageController extends Thread{
     private TextField productoPrecioField;
     @FXML
     private TextField productoStockField;
+    @FXML
+    private TextField buscarProducto;
 
     @FXML
     private TableView<ClienteBean> clientesTable;
@@ -146,6 +147,10 @@ public class EasyManageController extends Thread{
 
         buscarCliente.textProperty().addListener((observable, oldValue, newValue) -> {
             buscarCliente(newValue);
+        });
+
+        buscarProducto.textProperty().addListener((observable, oldValue, newValue) -> {
+            buscarProducto(newValue);
         });
 
     }
@@ -384,7 +389,6 @@ public class EasyManageController extends Thread{
                 mostrarAlerta("Error", error, "El producto no ha sido agregado", Alert.AlertType.ERROR);
                 return;
             }
-
             ProductoBean pro = xp.BuscarProducto(id);
             if (pro != null) {
                 mostrarAlerta("Error", "El cliente con id " + id + " ya existe.", "No se puede agregar un cliente duplicado.", Alert.AlertType.ERROR);
@@ -407,6 +411,7 @@ public class EasyManageController extends Thread{
             throw new RuntimeException(e);
         }
     }
+
     private void cagarTablaProducto() throws Exception {
         try {
             List<ProductoBean> productosBeans = xp.listaproductos();
@@ -445,6 +450,7 @@ public class EasyManageController extends Thread{
 
             }}
     }
+
     private void actualizarProducto() {
         ProductoBean productoSeleccionado = productosTable.getSelectionModel().getSelectedItem();
 
@@ -545,6 +551,23 @@ public class EasyManageController extends Thread{
             }
             return error.toString();
 
+    }
+    private void buscarProducto(String texto) {
+        if (texto.isEmpty()) {
+            productosTable.setItems(productosList);
+        } else {
+            ObservableList<ProductoBean> productosFiltrados = FXCollections.observableArrayList();
+            for (ProductoBean producto : productosList) {
+                if (String.valueOf(producto.getId()).contains(texto) ||
+                        producto.getNombre().toLowerCase().contains(texto.toLowerCase()) ||
+                        producto.getDescripcion().toLowerCase().contains(texto.toLowerCase()) ||
+                        String.valueOf(producto.getPrecio()).contains(texto) ||
+                        String.valueOf(producto.getCantidad()).contains(texto)) {
+                    productosFiltrados.add(producto);
+                }
+            }
+            productosTable.setItems(productosFiltrados);
+        }
     }
     /**
      * This method is for both (client,product).

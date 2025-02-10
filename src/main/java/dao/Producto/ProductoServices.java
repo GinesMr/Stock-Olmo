@@ -61,22 +61,26 @@ public class ProductoServices implements ProductoDao {
 
     @Override
     public ProductoBean findById(int id) throws Exception {
-        MongoCollection<Document> collection = db.getCollection("productos");
+        try {
+            MongoCollection<Document> collection = db.getCollection("productos");
 
-        Bson filter = Filters.eq("id", id);
-        FindIterable<Document> result = collection.find(filter);
+            Bson filter = Filters.eq("id", id);
+            Document document = collection.find(filter).first();
 
-        Document document = result.first();
-        if (document != null) {
-            ProductoBean producto = new ProductoBean();
-            producto.setId(document.getInteger("id"));
-            producto.setNombre(document.getString("nombre"));
-            producto.setDescripcion(document.getString("descripcion"));
-            producto.setPrecio(Double.parseDouble (document.getString ("precio")));
-            producto.setCantidad(document.getInteger("cantidad"));
-            producto.setFechaRegistro(document.getDate("fechaRegistro"));
-            return producto;
-        } else {
+            if (document != null) {
+                ProductoBean producto = new ProductoBean();
+                producto.setId(document.getInteger("id")); // Obtener el campo "id"
+                producto.setNombre(document.getString("nombre"));
+                producto.setDescripcion(document.getString("descripcion"));
+                producto.setPrecio(document.getDouble("precio")); // Obtener el campo "precio" como double
+                producto.setCantidad(document.getInteger("cantidad")); // Obtener el campo "cantidad"
+                producto.setFechaRegistro(document.getDate("fecha")); // Obtener el campo "fecha" como Date
+                return producto;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

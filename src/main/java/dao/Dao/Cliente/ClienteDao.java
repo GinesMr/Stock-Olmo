@@ -3,7 +3,7 @@ package dao.Dao.Cliente;
 import model.ClienteBean.ClienteBean;
 import java.util.List;
 
-
+//Metodos Crud
 public interface ClienteDao {
 
     void insert(ClienteBean cliente) throws Exception;

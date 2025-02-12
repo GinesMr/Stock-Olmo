@@ -3,6 +3,7 @@ package model.ProductoBean;
 import java.io.Serializable;
 import java.util.Date;
 
+//Modelo Bean
 public class ProductoBean implements Serializable {
     private int id;
     private String nombre;

@@ -4,6 +4,7 @@ import model.ProductoBean.ProductoBean;
 
 import java.util.List;
 
+//Metodos Crud
 public interface ProductoDao {
 
     void insert(ProductoBean producto) throws Exception;

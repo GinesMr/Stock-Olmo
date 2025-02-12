@@ -2,7 +2,7 @@ package model.ClienteBean;
 
 import java.io.Serializable;
 import java.util.Date;
-
+//Modelo Bean
 public class ClienteBean implements Serializable {
     private int dni;
     private String nombre;

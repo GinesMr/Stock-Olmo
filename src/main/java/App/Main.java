@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -21,6 +22,9 @@ public class Main extends Application {
         // Cargar y aplicar el archivo CSS
         String css = getClass().getResource("/MainView/si.css").toExternalForm();
         scene.getStylesheets().add(css);
+
+        // ** Establecer el icono del Stage principal **
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/iconos/icon.png")));
 
         // Configurar la ventana principal
         primaryStage.setTitle("Easy Manage - Gestión de Clientes y Productos");

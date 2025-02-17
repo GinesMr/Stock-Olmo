@@ -1,15 +1,15 @@
 package service.LogicaNegocio.dataProducto;
 
-import dao.Producto.ProductoServices;
+import dao.Producto.ProductoDaoImpl;
 import model.ProductoBean.ProductoBean;
 
 import java.util.List;
 
 public class DataProducto {
-    private ProductoServices productoServices;
+    private ProductoDaoImpl productoIm;
 
     public DataProducto() {
-        this.productoServices = new ProductoServices();
+        this.productoIm = new ProductoDaoImpl();
     }
 
     // Método para insertar un producto con doble check
@@ -25,7 +25,7 @@ public class DataProducto {
         }
 
         try {
-            productoServices.insert(prod);
+            productoIm.insert(prod);
             System.out.println("Producto insertado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al insertar producto: " + e.getMessage());
@@ -45,7 +45,7 @@ public class DataProducto {
         }
 
         try {
-            productoServices.update(prod);
+            productoIm.update(prod);
             System.out.println("Producto actualizado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al actualizar producto: " + e.getMessage());
@@ -53,14 +53,14 @@ public class DataProducto {
     }
 
     // Método para eliminar un producto con doble check
-    public void Eliminar(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            System.err.println("Error: El nombre del producto no puede estar vacío.");
+    public void Eliminar(int idProducto) {
+        if (idProducto < 0) {
+            System.err.println("Error: El id del producto no puede ser negativo.");
             return;
         }
 
         try {
-            productoServices.delete(nombre);
+            productoIm.delete(idProducto);
             System.out.println("Producto eliminado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al eliminar producto: " + e.getMessage());
@@ -75,7 +75,7 @@ public class DataProducto {
         }
 
         try {
-            return productoServices.findById(id);
+            return productoIm.findById(id);
         } catch (Exception e) {
             System.err.println("Error al buscar producto: " + e.getMessage());
             return null;
@@ -85,7 +85,7 @@ public class DataProducto {
     // Método para listar todos los productos
     public List<ProductoBean> listaproductos() {
         try {
-            return productoServices.findAll();
+            return productoIm.findAll();
         } catch (Exception e) {
             System.err.println("Error al listar productos: " + e.getMessage());
             return null;
@@ -94,13 +94,8 @@ public class DataProducto {
 
     // Método para validar los datos del producto
     private boolean validarProducto(ProductoBean prod) {
-        if (prod.getId() <= 0) {
+        if (prod.getIdProducto() <= 0) {
             System.err.println("Error: El ID no puede ser menor o igual a 0.");
-            return false;
-        }
-
-        if (prod.getNombre() == null || prod.getNombre().trim().isEmpty()) {
-            System.err.println("Error: El nombre no puede estar vacío.");
             return false;
         }
 
@@ -109,12 +104,12 @@ public class DataProducto {
             return false;
         }
 
-        if (prod.getPrecio() <= 0) {
-            System.err.println("Error: El precio no puede ser menor o igual a 0.");
+        if (prod.getStockActual() <= 0) {
+            System.err.println("Error: El stock actual no puede ser menor o igual a 0.");
             return false;
         }
 
-        if (prod.getCantidad() < 0) {
+        if (prod.getStockMinimo() < 0) {
             System.err.println("Error: La cantidad no puede ser negativa.");
             return false;
         }

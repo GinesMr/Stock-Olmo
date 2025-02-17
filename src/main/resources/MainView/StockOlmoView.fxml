@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.MainController.StockOlmoController">
+   <center>
+      <TabPane>
+         <tabs>
+            <Tab closable="false" text="Gestión de Productos">
+               <content>
+                  <VBox spacing="10">
+                     <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                     </padding>
+                     <HBox spacing="10" alignment="CENTER">
+                        <TextField fx:id="idProductoField" promptText="ID del Producto" prefWidth="120">
+                           <tooltip>
+                              <Tooltip text="Ingrese el ID del producto (solo números)."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="descripcionField" promptText="Descripción" prefWidth="200">
+                           <tooltip>
+                              <Tooltip text="Ingrese la descripción del producto."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="stockActualField" promptText="Stock Actual" prefWidth="120">
+                           <tooltip>
+                              <Tooltip text="Ingrese el stock actual del producto (solo números)."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="stockMinimoField" promptText="Stock Mínimo" prefWidth="120">
+                           <tooltip>
+                              <Tooltip text="Ingrese el stock mínimo del producto (solo números)."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="pvpField" promptText="Precio (PVP)" prefWidth="120">
+                           <tooltip>
+                              <Tooltip text="Ingrese el precio de venta al público (solo números)."/>
+                           </tooltip>
+                        </TextField>
+                        <HBox spacing="10">
+                           <TextField fx:id="buscarProducto" promptText="Buscar Producto">
+                              <tooltip>
+                                 <Tooltip text="Busca un producto por Id, descripcion, stock, precio." />
+                              </tooltip>
+                              <HBox.margin>
+                                 <Insets left="120" />
+                              </HBox.margin>
+                           </TextField>
+                        </HBox>
+                     </HBox>
+
+                     <HBox spacing="10" alignment="CENTER">
+                        <Button fx:id="agregarProductoButton" text="Agregar Producto" prefWidth="180">
+                           <tooltip>
+                              <Tooltip text="Agrega un nuevo producto a la base de datos."/>
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="actualizarProductoButton" text="Actualizar Producto" prefWidth="180">
+                           <tooltip>
+                              <Tooltip text="Actualiza la información del producto seleccionado."/>
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="eliminarProductoButton" text="Eliminar Producto" prefWidth="180">
+                           <tooltip>
+                              <Tooltip text="Elimina el producto seleccionado de la base de datos."/>
+                           </tooltip>
+                        </Button>
+                     </HBox>
+
+                     <TableView fx:id="productosTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                           <TableColumn fx:id="colIdProducto" text="ID Producto" minWidth="100.0" prefWidth="120.0"/>
+                           <TableColumn fx:id="colDescripcion" text="Descripción" minWidth="150.0" prefWidth="200.0"/>
+                           <TableColumn fx:id="colStockActual" text="Stock Actual" minWidth="100.0" prefWidth="120.0"/>
+                           <TableColumn fx:id="colStockMinimo" text="Stock Mínimo" minWidth="100.0" prefWidth="120.0"/>
+                           <TableColumn fx:id="colPvp" text="PVP" minWidth="80.0" prefWidth="100.0"/>
+                        </columns>
+                        <columnResizePolicy>
+                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                     </TableView>
+                  </VBox>
+               </content>
+            </Tab>
+
+            <Tab closable="false" text="Generación de Pedidos">
+               <content>
+                  <VBox spacing="10">
+                     <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                     </padding>
+                     <HBox spacing="10" alignment="CENTER">
+                        <TextField fx:id="numeroPedidoField" promptText="Número de Pedido"
+                                   editable="false" prefWidth="150">
+                           <tooltip>
+                              <Tooltip text="Número único del pedido (generado automáticamente)."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="idProductoPedidoField" promptText="ID del Producto"
+                                   editable="false" prefWidth="150">
+                           <tooltip>
+                              <Tooltip text="ID del producto asociado al pedido."/>
+                           </tooltip>
+                        </TextField>
+                        <TextField fx:id="cantidadPedidoField" promptText="Cantidad" prefWidth="120">
+                           <tooltip>
+                              <Tooltip text="Cantidad de productos a solicitar en el pedido."/>
+                           </tooltip>
+                        </TextField>
+                        <DatePicker fx:id="fechaPedidoField" promptText="Fecha del Pedido" prefWidth="150">
+                           <tooltip>
+                              <Tooltip text="Seleccione la fecha del pedido."/>
+                           </tooltip>
+                        </DatePicker>
+                     </HBox>
+
+                     <HBox spacing="10" alignment="CENTER">
+                        <Button fx:id="generarPedidoButton" text="Generar Pedido" prefWidth="150">
+                           <tooltip>
+                              <Tooltip text="Genera un nuevo pedido para reponer el stock."/>
+                           </tooltip>
+                        </Button>
+                     </HBox>
+
+                     <TableView fx:id="pedidosTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                           <TableColumn fx:id="colNumeroPedido" text="Número de Pedido" minWidth="120.0" prefWidth="150.0"/>
+                           <TableColumn fx:id="colIdProductoPedido" text="ID Producto" minWidth="100.0" prefWidth="120.0"/>
+                           <TableColumn fx:id="colFechaPedido" text="Fecha" minWidth="100.0" prefWidth="120.0"/>
+                           <TableColumn fx:id="colCantidadPedido" text="Cantidad" minWidth="80.0" prefWidth="100.0"/>
+                           <TableColumn fx:id="colPedir" text="Pedir" minWidth="80.0" prefWidth="100.0"/>
+                        </columns>
+                        <columnResizePolicy>
+                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                     </TableView>
+                  </VBox>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

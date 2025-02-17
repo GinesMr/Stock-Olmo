@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         // Cargar el archivo FXML desde la ruta especificada
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView/MainView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView/StockOlmoView.fxml"));
         Parent root = loader.load();
 
         // Configurar la escena
@@ -27,7 +27,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/iconos/icon.png")));
 
         // Configurar la ventana principal
-        primaryStage.setTitle("Easy Manage - Gestión de Clientes y Productos");
+        primaryStage.setTitle("Stock-Olmo - Gestión de Productos y Pedidos");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

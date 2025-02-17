@@ -1,52 +1,36 @@
 package model.ProductoBean;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-import java.util.Date;
 
-//Modelo Bean
 public class ProductoBean implements Serializable {
-    private int id;
-    private String nombre;
+    private int idProducto;
     private String descripcion;
-    private double precio;
-    private int cantidad;
-    private Date fechaRegistro;
+    private int stockActual;
+    private int stockMinimo;
+    private float pvp;
+
+    // PropertyChangeSupport to manage bound properties
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public ProductoBean() {
-        this.fechaRegistro = new Date();
     }
 
-    public ProductoBean(int id, String nombre, String descripcion, double precio, int cantidad, Date fechaRegistro) {
-        this.id = id;
-        this.nombre = nombre;
+    public ProductoBean(int idProducto, String descripcion, int stockActual, int stockMinimo, float pvp) {
+        this.idProducto = idProducto;
         this.descripcion = descripcion;
-        this.precio = precio;
-        this.cantidad = cantidad;
-        this.fechaRegistro = fechaRegistro != null ? fechaRegistro : new Date();
+        this.stockActual = stockActual;
+        this.stockMinimo = stockMinimo;
+        this.pvp = pvp;
     }
 
-    public int getId() {
-        return id;
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public void setId(int id) {
-        if (id > 0) {
-            this.id = id;
-        } else {
-            throw new IllegalArgumentException("ID inválido");
-        }
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        if (nombre != null && !nombre.trim().isEmpty()) {
-            this.nombre = nombre;
-        } else {
-            throw new IllegalArgumentException("Nombre no puede estar vacío");
-        }
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getDescripcion() {
@@ -54,50 +38,64 @@ public class ProductoBean implements Serializable {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        if (precio >= 0) {
-            this.precio = precio;
+        if (descripcion != null && !descripcion.trim().isEmpty()) {
+            this.descripcion = descripcion;
         } else {
-            throw new IllegalArgumentException("Precio no puede ser negativo");
+            throw new IllegalArgumentException("Descripción no puede estar vacía");
         }
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public int getStockActual() {
+        return stockActual;
     }
 
-    public void setCantidad(int cantidad) {
-        if (cantidad >= 0) {
-            this.cantidad = cantidad;
+    public void setStockActual(int stockActual) {
+        int oldStockActual = this.stockActual;
+        this.stockActual = stockActual;
+        // Notify listeners of the change
+        propertyChangeSupport.firePropertyChange("stockActual", oldStockActual, this.stockActual);
+    }
+
+    public int getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(int stockMinimo) {
+        int oldStockMinimo = this.stockMinimo;
+        this.stockMinimo = stockMinimo;
+        // Notify listeners of the change
+        propertyChangeSupport.firePropertyChange("stockMinimo", oldStockMinimo, this.stockMinimo);
+    }
+
+    public float getPvp() {
+        return pvp;
+    }
+
+    public void setPvp(float pvp) {
+        if (pvp >= 0) {
+            this.pvp = pvp;
         } else {
-            throw new IllegalArgumentException("Cantidad no puede ser negativa");
+            throw new IllegalArgumentException("PVP no puede ser negativo");
         }
     }
 
-    public Date getFechaRegistro() {
-        return fechaRegistro;
+    // Methods to manage PropertyChangeListeners
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
-        this.fechaRegistro = fechaRegistro != null ? fechaRegistro : new Date();
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
     @Override
     public String toString() {
         return "ProductoBean{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                "idProducto=" + idProducto +
                 ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", cantidad=" + cantidad +
-                ", fechaRegistro=" + fechaRegistro +
+                ", stockActual=" + stockActual +
+                ", stockMinimo=" + stockMinimo +
+                ", pvp=" + pvp +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
 package App;
 
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         // Cargar el archivo FXML desde la ruta especificada
+        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView/StockOlmoView.fxml"));
         Parent root = loader.load();
 
@@ -20,8 +23,8 @@ public class Main extends Application {
         Scene scene = new Scene(root);
 
         // Cargar y aplicar el archivo CSS
-        String css = getClass().getResource("/MainView/si.css").toExternalForm();
-        scene.getStylesheets().add(css);
+        //String css = getClass().getResource("/MainView/si.css").toExternalForm();
+        //scene.getStylesheets().add(css);
 
         // ** Establecer el icono del Stage principal **
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/iconos/icon.png")));

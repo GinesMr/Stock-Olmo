@@ -1,5 +1,4 @@
 module org.example.ejer1 {
-    requires javafx.controls;
     requires org.kordamp.ikonli.javafx;
     requires javafx.web;
     requires org.mongodb.driver.sync.client;
@@ -7,6 +6,7 @@ module org.example.ejer1 {
     requires org.mongodb.driver.core;
     requires javafx.fxml;
     requires java.desktop;
+    requires atlantafx.base;
 
     opens model.PedidoBean to javafx.base;
     opens controller.MainController to javafx.fxml;

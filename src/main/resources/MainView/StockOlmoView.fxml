@@ -55,21 +55,31 @@
                         </HBox>
                      </HBox>
 
-                     <HBox spacing="10" alignment="CENTER">
-                        <Button fx:id="agregarProductoButton" text="Agregar Producto" prefWidth="180">
+                     <!-- Botones Centrados -->
+                     <HBox spacing="20" alignment="CENTER">
+                        <Button fx:id="agregarProductoButton" text="Agregar Producto" prefWidth="150">
                            <tooltip>
                               <Tooltip text="Agrega un nuevo producto a la base de datos."/>
                            </tooltip>
+                           <HBox.margin>
+                              <Insets top="10" bottom="10"/>
+                           </HBox.margin>
                         </Button>
-                        <Button fx:id="actualizarProductoButton" text="Actualizar Producto" prefWidth="180">
+                        <Button fx:id="actualizarProductoButton" text="Actualizar Producto" prefWidth="150">
                            <tooltip>
                               <Tooltip text="Actualiza la información del producto seleccionado."/>
                            </tooltip>
+                           <HBox.margin>
+                              <Insets top="10" bottom="10"/>
+                           </HBox.margin>
                         </Button>
-                        <Button fx:id="eliminarProductoButton" text="Eliminar Producto" prefWidth="180">
+                        <Button fx:id="eliminarProductoButton" text="Eliminar Producto" prefWidth="150">
                            <tooltip>
                               <Tooltip text="Elimina el producto seleccionado de la base de datos."/>
                            </tooltip>
+                           <HBox.margin>
+                              <Insets top="10" bottom="10"/>
+                           </HBox.margin>
                         </Button>
                      </HBox>
 
@@ -96,14 +106,12 @@
                         <Insets top="10" right="10" bottom="10" left="10"/>
                      </padding>
                      <HBox spacing="10" alignment="CENTER">
-                        <TextField fx:id="numeroPedidoField" promptText="Número de Pedido"
-                                   editable="false" prefWidth="150">
+                        <TextField fx:id="numeroPedidoField" promptText="Número de Pedido" prefWidth="150">
                            <tooltip>
                               <Tooltip text="Número único del pedido (generado automáticamente)."/>
                            </tooltip>
                         </TextField>
-                        <TextField fx:id="idProductoPedidoField" promptText="ID del Producto"
-                                   editable="false" prefWidth="150">
+                        <TextField fx:id="idProductoPedidoField" promptText="ID del Producto" prefWidth="150">
                            <tooltip>
                               <Tooltip text="ID del producto asociado al pedido."/>
                            </tooltip>
@@ -118,13 +126,35 @@
                               <Tooltip text="Seleccione la fecha del pedido."/>
                            </tooltip>
                         </DatePicker>
+                        <HBox spacing="10">
+                           <TextField fx:id="buscarPedido" promptText="Buscar Pedido">
+                              <tooltip>
+                                 <Tooltip text="Busca un pedido por atributo." />
+                              </tooltip>
+                              <HBox.margin>
+                                 <Insets left="120" />
+                              </HBox.margin>
+                           </TextField>
+                        </HBox>
                      </HBox>
 
-                     <HBox spacing="10" alignment="CENTER">
+                     <!-- Botones Centrados -->
+                     <HBox spacing="20" alignment="CENTER">
                         <Button fx:id="generarPedidoButton" text="Generar Pedido" prefWidth="150">
                            <tooltip>
                               <Tooltip text="Genera un nuevo pedido para reponer el stock."/>
                            </tooltip>
+                           <HBox.margin>
+                              <Insets top="10" bottom="10"/>
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="FinalizarPedidoButton" text="Finalizar Pedido" prefWidth="150">
+                           <tooltip>
+                              <Tooltip text="Finaliza el proceso del pedido."/>
+                           </tooltip>
+                           <HBox.margin>
+                              <Insets top="10" bottom="10"/>
+                           </HBox.margin>
                         </Button>
                      </HBox>
 

@@ -2,21 +2,18 @@ package model.ProductoBean;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
 
-public class ProductoBean implements Serializable {
+public class ProductoBean {
     private int idProducto;
     private String descripcion;
     private int stockActual;
     private int stockMinimo;
     private float pvp;
 
-    // PropertyChangeSupport to manage bound properties
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    // Soporte para PropertyChangeListener
+    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    public ProductoBean() {
-    }
-
+    // Constructor
     public ProductoBean(int idProducto, String descripcion, int stockActual, int stockMinimo, float pvp) {
         this.idProducto = idProducto;
         this.descripcion = descripcion;
@@ -24,6 +21,8 @@ public class ProductoBean implements Serializable {
         this.stockMinimo = stockMinimo;
         this.pvp = pvp;
     }
+
+    // Getters y setters
 
     public int getIdProducto() {
         return idProducto;
@@ -38,11 +37,7 @@ public class ProductoBean implements Serializable {
     }
 
     public void setDescripcion(String descripcion) {
-        if (descripcion != null && !descripcion.trim().isEmpty()) {
-            this.descripcion = descripcion;
-        } else {
-            throw new IllegalArgumentException("Descripción no puede estar vacía");
-        }
+        this.descripcion = descripcion;
     }
 
     public int getStockActual() {
@@ -50,10 +45,10 @@ public class ProductoBean implements Serializable {
     }
 
     public void setStockActual(int stockActual) {
-        int oldStockActual = this.stockActual;
+        int oldStock = this.stockActual; // Guardar el valor antiguo
         this.stockActual = stockActual;
-        // Notify listeners of the change
-        propertyChangeSupport.firePropertyChange("stockActual", oldStockActual, this.stockActual);
+        // Notificar a los listeners que el stock ha cambiado
+        propertyChangeSupport.firePropertyChange("stockActual", oldStock, stockActual);
     }
 
     public int getStockMinimo() {
@@ -61,10 +56,7 @@ public class ProductoBean implements Serializable {
     }
 
     public void setStockMinimo(int stockMinimo) {
-        int oldStockMinimo = this.stockMinimo;
         this.stockMinimo = stockMinimo;
-        // Notify listeners of the change
-        propertyChangeSupport.firePropertyChange("stockMinimo", oldStockMinimo, this.stockMinimo);
     }
 
     public float getPvp() {
@@ -72,14 +64,10 @@ public class ProductoBean implements Serializable {
     }
 
     public void setPvp(float pvp) {
-        if (pvp >= 0) {
-            this.pvp = pvp;
-        } else {
-            throw new IllegalArgumentException("PVP no puede ser negativo");
-        }
+        this.pvp = pvp;
     }
 
-    // Methods to manage PropertyChangeListeners
+    // Métodos para agregar y eliminar listeners
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
@@ -88,14 +76,8 @@ public class ProductoBean implements Serializable {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
-    @Override
-    public String toString() {
-        return "ProductoBean{" +
-                "idProducto=" + idProducto +
-                ", descripcion='" + descripcion + '\'' +
-                ", stockActual=" + stockActual +
-                ", stockMinimo=" + stockMinimo +
-                ", pvp=" + pvp +
-                '}';
+    // Método para acceder al PropertyChangeSupport
+    public PropertyChangeSupport getPropertyChangeSupport() {
+        return propertyChangeSupport;
     }
 }

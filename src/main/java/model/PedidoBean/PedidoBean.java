@@ -3,6 +3,7 @@ package model.PedidoBean;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class PedidoBean implements PropertyChangeListener, Serializable {
@@ -12,7 +13,7 @@ public class PedidoBean implements PropertyChangeListener, Serializable {
     private int cantidad;
     private boolean pedir;
 
-    public PedidoBean() {
+    public PedidoBean(int numeroPedido, int idProducto, LocalDate fechaPedido, int cantidad, boolean pedir) {
         this.fecha = new Date(); // Default to current date
     }
 

@@ -1,7 +1,5 @@
 package dao.Pedido;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
@@ -19,9 +17,16 @@ import static com.mongodb.client.model.Filters.eq;
 public class PedidoDaoImpl implements PedidoDao {
     private MongoCollection<Document> collection;
 
-    mongoDbConnector connector = new mongoDbConnector();
-    MongoDatabase db = connector.getDatabase();
+    private final mongoDbConnector connector = new mongoDbConnector();
+    private final MongoDatabase db = connector.getDatabase();
 
+    public PedidoDaoImpl() {
+        // Inicializar la colección
+        this.collection = db.getCollection("pedidos"); // Reemplaza "productos" con el nombre de tu colección
+        if (this.collection == null) {
+            throw new IllegalStateException("La colección no se pudo inicializar.");
+        }
+    }
 
     @Override
     public void insert(PedidoBean pedido) throws Exception {

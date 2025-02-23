@@ -54,8 +54,7 @@ public class StockChangeListener implements PropertyChangeListener {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Pedido Automático Generado");
                         alert.setHeaderText("Stock Bajo Detectado");
-                        alert.setContentText("Se ha generado un pedido automático para el producto ID: " + producto.getIdProducto() +
-                                "\nCantidad pedida: " + cantidadAPedir);
+                        alert.setContentText("Se ha generado un pedido automático para el producto ID: " + producto.getIdProducto() +"Nombre:"+producto.getDescripcion()+ "\nCantidad pedida: " + cantidadAPedir);
 
                         // Mostrar la alerta y esperar a que el usuario la cierre
                         alert.showAndWait();

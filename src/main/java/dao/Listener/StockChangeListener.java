@@ -2,6 +2,7 @@ package dao.Listener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
 import java.util.Date;
 
 import controller.MainController.StockOlmoController;
@@ -54,7 +55,7 @@ public class StockChangeListener implements PropertyChangeListener {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Pedido Automático Generado");
                         alert.setHeaderText("Stock Bajo Detectado");
-                        alert.setContentText("Se ha generado un pedido automático para el producto ID: " + producto.getIdProducto() +"Nombre:"+producto.getDescripcion()+ "\nCantidad pedida: " + cantidadAPedir);
+                        alert.setContentText("Se ha generado un pedido automático para el producto ID: " + producto.getIdProducto() + " Nombre: " + producto.getDescripcion() + "\nCantidad pedida: " + cantidadAPedir);
 
                         // Mostrar la alerta y esperar a que el usuario la cierre
                         alert.showAndWait();
@@ -76,7 +77,6 @@ public class StockChangeListener implements PropertyChangeListener {
     }
 
     // Método simple para generar un número de pedido
-    // En un entorno real, esto debería ser más sofisticado
     private int generarNumeroPedido() {
         return (int) (System.currentTimeMillis() % 1000000);
     }

@@ -13,9 +13,6 @@ public class PedidoBean implements PropertyChangeListener, Serializable {
     private int cantidad;
     private boolean pedir;
 
-    public PedidoBean(int numeroPedido, int idProducto, LocalDate fechaPedido, int cantidad, boolean pedir) {
-        this.fecha = new Date(); // Default to current date
-    }
 
     public PedidoBean(int numeroPedido, int idProducto, Date fecha, int cantidad, boolean pedir) {
         this.numeroPedido = numeroPedido;

@@ -10,12 +10,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import model.PedidoBean.PedidoBean;
 import model.ProductoBean.ProductoBean;
-import service.LogicaNegocio.dataCliente.DataPedido;
+import service.LogicaNegocio.dataPedido.DataPedido;
 import service.LogicaNegocio.dataProducto.DataProducto;
 
-import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -378,8 +378,9 @@ public class StockOlmoController {
             int numeroPedido = Integer.parseInt(numeroPedidoField.getText());
             int idProducto = Integer.parseInt(idProductoPedidoField.getText());
             int cantidad = Integer.parseInt(cantidadPedidoField.getText());
-            LocalDate fechaPedido = fechaPedidoField.getValue();
-
+            LocalDate fechaPedidoLocalDate = fechaPedidoField.getValue();
+            // Convertir LocalDate a java.util.Date
+            Date fechaPedido = Date.from(fechaPedidoLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             // Validar datos básicos del pedido
             if (!validarDatosPedido(numeroPedido, idProducto, cantidad, fechaPedido)) {
                 return;
@@ -477,7 +478,7 @@ public class StockOlmoController {
             pedidosTable.refresh();
         }
     }
-private void finalizarPedido() {
+    private void finalizarPedido() {
         // Obtiene el pedido seleccionado en la tabla de pedidos
         PedidoBean pedidoSeleccionado = pedidosTable.getSelectionModel().getSelectedItem();
 
@@ -485,23 +486,38 @@ private void finalizarPedido() {
             // Si no hay ningún pedido seleccionado, muestra una alerta
             mostrarAlerta("Información", "Sin selección", "El pedido no ha sido seleccionado.", Alert.AlertType.INFORMATION);
         } else {
-            // Muestra una alerta de confirmación para eliminar el pedido
+            // Muestra una alerta de confirmación para finalizar el pedido
             Alert confirmacion = mostrarAlerta("Confirmación", "¿Está seguro que desea finalizar este pedido?", "El pedido será finalizado permanentemente.", Alert.AlertType.CONFIRMATION);
 
-            // Si el usuario confirma la eliminación
+            // Si el usuario confirma la finalización
             if (confirmacion.getResult() == ButtonType.OK) {
                 int numeroPedido = pedidoSeleccionado.getNumeroPedido(); // Obtiene el número del pedido
 
                 try {
-                    // Elimina el pedido de la base de datos
-                    dataPedido.Eliminar(numeroPedido);
+                    // Obtener el producto asociado al pedido
+                    ProductoBean producto = dataProd.BuscarProducto(pedidoSeleccionado.getIdProducto());
 
-                    // Actualiza las tablas después de eliminar el pedido
-                    cagarTablaPedido(); // Recarga la tabla de pedidos
-                    cagarTablaCliente(); // Recarga la tabla de productos (si es necesario)
+                    if (producto != null) {
+                        // Aumentar el stock del producto
+                        int nuevoStock = producto.getStockActual() + pedidoSeleccionado.getCantidad();
+                        producto.setStockActual(nuevoStock);
 
-                    // Muestra una alerta de éxito
-                    mostrarAlerta("Éxito", "Pedido finalizado", "El pedido fue finalizado correctamente.", Alert.AlertType.INFORMATION);
+                        // Actualizar el producto en la base de datos
+                        dataProd.Actualizar(producto);
+
+                        // Eliminar el pedido de la base de datos
+                        dataPedido.Eliminar(numeroPedido);
+
+                        // Actualizar las tablas después de finalizar el pedido
+                        cagarTablaPedido(); // Recarga la tabla de pedidos
+                        cagarTablaCliente(); // Recarga la tabla de productos (si es necesario)
+
+                        // Muestra una alerta de éxito
+                        mostrarAlerta("Éxito", "Pedido finalizado", "El pedido fue finalizado correctamente y el stock del producto se ha actualizado.", Alert.AlertType.INFORMATION);
+                    } else {
+                        // Si no se encuentra el producto, muestra una alerta de error
+                        mostrarAlerta("Error", "Error al finalizar el pedido", "No se encontró el producto asociado al pedido.", Alert.AlertType.ERROR);
+                    }
                 } catch (Exception ex) {
                     // Si ocurre un error, muestra una alerta de error
                     mostrarAlerta("Error", "Error al finalizar el pedido", ex.getMessage(), Alert.AlertType.ERROR);
@@ -509,7 +525,7 @@ private void finalizarPedido() {
             }
         }
     }
-    private boolean validarDatosPedido(int numeroPedido, int idProducto, int cantidad, LocalDate fechaPedido) {
+    private boolean validarDatosPedido(int numeroPedido, int idProducto, int cantidad, Date fechaPedido) {
         if (numeroPedido <= 0) {
             mostrarAlerta("Error", "Número de pedido inválido",
                     "El número de pedido debe ser positivo.",
@@ -538,7 +554,10 @@ private void finalizarPedido() {
             return false;
         }
 
-        if (fechaPedido.isBefore(LocalDate.now())) {
+        // Obtener la fecha actual
+        Date fechaActual = new Date();
+        // Verificar si la fecha del pedido es anterior a la fecha actual
+        if (fechaPedido.before(fechaActual)) {
             mostrarAlerta("Error", "Fecha inválida",
                     "La fecha del pedido no puede ser anterior a la fecha actual.",
                     Alert.AlertType.ERROR);

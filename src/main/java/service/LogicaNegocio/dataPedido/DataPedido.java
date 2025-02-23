@@ -1,4 +1,4 @@
-package service.LogicaNegocio.dataCliente;
+package service.LogicaNegocio.dataPedido;
 
 import dao.Pedido.PedidoDaoImpl;
 import model.PedidoBean.PedidoBean;
@@ -54,7 +54,7 @@ public class DataPedido {
 
     // Método para eliminar un pedido
     public void Eliminar(int numeroPedido) {
-        if (numeroPedido <= 0) {
+        if (numeroPedido < 0) {
             System.err.println("Error: El número de pedido no puede ser menor o igual a 0.");
             return;
         }
@@ -94,7 +94,8 @@ public class DataPedido {
 
     // Método para validar los datos del pedido
     private boolean validarPedido(PedidoBean pedido) {
-        if (pedido.getNumeroPedido() <= 0) {
+
+        if (pedido.getNumeroPedido() < 0) {
             System.err.println("Error: El número de pedido no puede ser menor o igual a 0.");
             return false;
         }

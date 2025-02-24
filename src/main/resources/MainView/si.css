@@ -1,199 +1,136 @@
-/* General styles */
+/* Estilos generales para la aplicación */
 .root {
-    -fx-background-color: #ffffff;
-    -fx-font-family: 'Roboto', sans-serif;
-    -fx-font-size: 14px;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-base: #f6f8fa;
+    -fx-background: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-accent: #0366d6;
+    -fx-default-button: #0366d6;
+    -fx-focus-color: #0366d6;
+    -fx-faint-focus-color: #0366d622;
+    -fx-text-fill: #24292e;
 }
 
-/* TabPane styling */
-.tab-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: #ffffff;
-    -fx-border-width: 0 0 1px 0;
-}
-
-.tab-pane .tab-header-area {
-    -fx-background-color: #ffffff;
-    -fx-padding: 0;
-}
-
-.tab-pane .tab {
-    -fx-background-color: transparent;
-    -fx-padding: 12px 24px;
-    -fx-border-color: transparent;
-    -fx-border-width: 0 0 2px 0;
-}
-
-.tab-pane .tab:selected {
-    -fx-border-color: #007BFF;
-}
-
-.tab-pane .tab-label {
-    -fx-text-fill: #666666;
-}
-
-.tab-pane .tab:selected .tab-label {
-    -fx-text-fill: #007BFF;
-}
-
-/* TableView styling */
-.table-view {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1px 0;
-    -fx-padding: 0;
-}
-
-.table-view .column-header-background {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1px 0;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
-    -fx-size: 45px;
-}
-
-.table-view .column-header .label {
-    -fx-text-fill: #1a1a1a;
-    -fx-font-weight: bold;
-}
-
-.table-view .table-row-cell {
-    -fx-background-color: #ffffff;
-    -fx-border-color: transparent;
-    -fx-padding: 10px 0;
-}
-
-.table-view .table-row-cell:odd {
-    -fx-background-color: #fafafa;
-}
-
-.table-view .table-row-cell:selected {
-    -fx-background-color: #e3f2fd;
-}
-
-.table-view .table-row-cell:selected .text {
-    -fx-fill: #1a1a1a !important;
-}
-
-.table-view .table-row-cell:selected > .table-cell {
-    -fx-text-fill: #1a1a1a;
-    -fx-background-color: #e3f2fd;
-}
-
-.table-view .table-row-cell:hover {
-    -fx-background-color: #f5f5f5;
-}
-
-/* TextField styling */
-.text-field {
-    -fx-background-color: transparent;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1px 0;
-    -fx-padding: 8px 0;
-    -fx-font-size: 14px;
-}
-
-.text-field:focused {
-    -fx-border-color: #007BFF;
-    -fx-border-width: 0 0 2px 0;
-}
-
-.text-field:disabled {
-    -fx-opacity: 0.7;
-}
-
-/* Button styling */
+/* Estilos para botones */
 .button {
-    -fx-background-color: transparent;
-    -fx-text-fill: #007BFF;
-    -fx-border-color: #007BFF;
-    -fx-border-width: 1px;
-    -fx-border-radius: 0;
+    -fx-background-color: #0366d6;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-padding: 8px 16px;
-    -fx-font-weight: bold;
+    -fx-font-size: 14px;
     -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: #007BFF;
-    -fx-text-fill: white;
+    -fx-background-color: #0356b6;
 }
 
 .button:pressed {
-    -fx-background-color: #0056b3;
+    -fx-background-color: #024da1;
 }
 
-/* DatePicker styling */
-.date-picker {
-    -fx-background-color: transparent;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1px 0;
+.button:disabled {
+    -fx-background-color: #d1d5da;
+    -fx-text-fill: #6a737d;
 }
 
-.date-picker:focused {
-    -fx-border-color: #007BFF;
+/* Botones específicos */
+#agregarProductoButton {
+    -fx-background-color: #28a745; /* Verde */
 }
 
-.date-picker .arrow-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+#agregarProductoButton:hover {
+    -fx-background-color: #22863a; /* Verde oscuro */
 }
 
-.date-picker .arrow-button:hover {
-    -fx-background-color: #f5f5f5;
+#actualizarProductoButton {
+    -fx-background-color: #0366d6; /* Azul */
 }
 
-/* Layout containers */
-.vbox, .hbox {
-    -fx-spacing: 10;
-    -fx-padding: 16px;
-    -fx-background-color: transparent;
+#actualizarProductoButton:hover {
+    -fx-background-color: #0356b6; /* Azul oscuro */
 }
 
-/* Scroll Bar */
-.scroll-bar:vertical,
-.scroll-bar:horizontal {
-    -fx-background-color: transparent;
+#eliminarProductoButton {
+    -fx-background-color: #d73a49; /* Rojo */
 }
 
-.scroll-bar:vertical .thumb,
-.scroll-bar:horizontal .thumb {
-    -fx-background-color: #c1c1c1;
-    -fx-background-radius: 0;
+#eliminarProductoButton:hover {
+    -fx-background-color: #cb2431; /* Rojo oscuro */
 }
 
-.scroll-bar:vertical .track,
-.scroll-bar:horizontal .track {
-    -fx-background-color: transparent;
+#generarPedidoButton {
+    -fx-background-color: #6f42c1; /* Morado */
 }
 
-/* Tooltip styling */
-.tooltip {
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
-    -fx-background-radius: 0;
-    -fx-padding: 8px;
+#generarPedidoButton:hover {
+    -fx-background-color: #5a32a3; /* Morado oscuro */
 }
 
-/* Empty states */
-.table-row-cell:empty {
-    -fx-background-color: transparent;
+#FinalizarPedidoButton {
+    -fx-background-color: #ffd33d; /* Amarillo */
 }
 
-.table-row-cell:empty .table-cell {
-    -fx-border-width: 0px;
+#FinalizarPedidoButton:hover {
+    -fx-background-color: #e6b800; /* Amarillo oscuro */
 }
 
-/* Error states */
-.error {
-    -fx-text-fill: #dc3545;
-    -fx-font-size: 12px;
-}
-
-/* Border pane */
-.border-pane {
+/* Campos de texto */
+.text-field {
     -fx-background-color: #ffffff;
+    -fx-border-color: #e1e4e8;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.text-field:hover {
+    -fx-border-color: #0366d6;
+}
+
+.text-field:focused {
+    -fx-border-color: #0366d6;
+}
+
+/* Tablas */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e1e4e8;
+    -fx-border-radius: 4px;
+}
+
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #24292e;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f6f8fa;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #0366d6;
+    -fx-text-fill: #ffffff;
+}
+
+/* Pestañas */
+.tab-pane {
+    -fx-background-color: #ffffff;
+}
+
+.tab {
+    -fx-background-color: #f6f8fa;
+    -fx-border-color: #e1e4e8;
+    -fx-border-radius: 4px 4px 0 0;
+    -fx-padding: 10px;
+}
+
+.tab:selected {
+    -fx-background-color: #0366d6;
+    -fx-text-fill: #ffffff;
+}
+
+.tab:hover {
+    -fx-background-color: #e1e4e8;
 }

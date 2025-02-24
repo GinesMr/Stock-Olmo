@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import dao.Conex.mongoDbConnector;
+import dao.Conex.MongoDbConnector;
 import dao.Dao.Producto.ProductoDao;
 import model.ProductoBean.ProductoBean;
 import org.bson.Document;
@@ -18,7 +18,7 @@ public class ProductoDaoImpl implements ProductoDao {
     private MongoCollection<Document> collection;
 
     // Conexión a MongoDB
-    private final mongoDbConnector connector = new mongoDbConnector();
+    private final MongoDbConnector connector = new MongoDbConnector();
     private final MongoDatabase db = connector.getDatabase();
 
     public ProductoDaoImpl() {

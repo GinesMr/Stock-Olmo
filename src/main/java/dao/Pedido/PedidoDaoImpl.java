@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import dao.Conex.mongoDbConnector;
+import dao.Conex.MongoDbConnector;
 import dao.Dao.Pedido.PedidoDao;
 import model.PedidoBean.PedidoBean;
 import org.bson.Document;
@@ -17,7 +17,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class PedidoDaoImpl implements PedidoDao {
     private MongoCollection<Document> collection;
 
-    private final mongoDbConnector connector = new mongoDbConnector();
+    private final MongoDbConnector connector = new MongoDbConnector();
     private final MongoDatabase db = connector.getDatabase();
 
     public PedidoDaoImpl() {

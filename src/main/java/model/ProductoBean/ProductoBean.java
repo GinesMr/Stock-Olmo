@@ -1,9 +1,11 @@
 package model.ProductoBean;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
-public class ProductoBean {
+public class ProductoBean  implements PropertyChangeListener, Serializable {
     private int idProducto;
     private String descripcion;
     private int stockActual;
@@ -79,5 +81,10 @@ public class ProductoBean {
     // Método para acceder al PropertyChangeSupport
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }

@@ -8,6 +8,18 @@
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.MainController.StockOlmoController">
+   <top>
+      <MenuBar>
+         <Menu text="Tema">
+            <MenuItem text="Cupertino Light" onAction="#cambiarTemaCupertinoLight" />
+            <MenuItem text="Cupertino Dark" onAction="#cambiarTemaCupertinoDark" />
+            <MenuItem text="Primer Dark" onAction="#cambiarTemaPrimerDark"/>
+            <MenuItem text="Nord Light" onAction="#cambiarTemaNordLight" />
+            <MenuItem text="Nord Dark" onAction="#cambiarTemaNordDark"/>
+            <MenuItem text="Dracula" onAction="#cambiarTemaDracula"/>
+         </Menu>
+      </MenuBar>
+   </top>
    <center>
       <TabPane>
          <tabs>

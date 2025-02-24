@@ -1,6 +1,8 @@
 package controller.MainController;
 
+import atlantafx.base.theme.*;
 import dao.Listener.StockChangeListener;
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -606,6 +608,37 @@ public class StockOlmoController {
 
         alert.showAndWait();
         return alert;
+    }
+    @FXML
+    private void cambiarTemaCupertinoLight() {
+        // Cambiar al tema claro (por ejemplo, CupertinoLight)
+        Application.setUserAgentStylesheet(new CupertinoLight().getUserAgentStylesheet());
+    }
+
+    @FXML
+    private void cambiarTemaCupertinoDark() {
+        // Cambiar al tema oscuro (por ejemplo, CupertinoDark)
+        Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
+    }
+    @FXML
+    private void cambiarTemaPrimerDark() {
+        // Cambiar al tema oscuro (por ejemplo, CupertinoDark)
+        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+    }
+    @FXML
+    private void cambiarTemaNordLight() {
+        // Cambiar al tema oscuro (por ejemplo, CupertinoDark)
+        Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
+    }
+    @FXML
+    private void cambiarTemaNordDark() {
+        // Cambiar al tema oscuro (por ejemplo, CupertinoDark)
+        Application.setUserAgentStylesheet(new NordDark().getUserAgentStylesheet());
+    }
+    @FXML
+    private void cambiarTemaDracula() {
+        // Cambiar al tema oscuro (por ejemplo, CupertinoDark)
+        Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
     }
 
     // Método para limpiar los campos del formulario de producto
